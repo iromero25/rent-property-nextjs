@@ -40,7 +40,7 @@ export interface IProperty {
   amenities: string[];
   rates: PropertyRates;
   seller_info: SellerInfo;
-  images: string[];
+  images: File[];
   is_featured: boolean;
   createdAt: string;
   updatedAt: string;
