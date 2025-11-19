@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useFormState } from "react-dom";
 import { useSession } from "next-auth/react";
 import addMessage from "@/app/actions/addMessage";
-// import SubmitMessageButton from './SubmitMessageButton';
+import { SubmitMessageButton } from "./SubmitMessageButton";
 
 interface PropertyContactFormProps {
   property: IProperty;
@@ -17,6 +17,7 @@ export default function PropertyContactForm({
 }: PropertyContactFormProps) {
   const { data: session } = useSession();
 
+  // ToDo: check if this is backwards compatible as React 19 uses another hook
   const [state, formAction] = useFormState(addMessage, {});
 
   useEffect(() => {
@@ -111,9 +112,7 @@ export default function PropertyContactForm({
               placeholder="Enter your message"
             ></textarea>
           </div>
-          {/* <div>
-            <SubmitMessageButton />
-          </div> */}
+          <SubmitMessageButton />
         </form>
       </div>
     )
