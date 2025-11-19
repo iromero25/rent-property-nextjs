@@ -1,7 +1,7 @@
-import { IProperty } from "./property";
 import { IUser } from "./user";
+import { IProperty } from "./property";
 
-export interface IMessageDocument {
+export interface IMessage {
   _id: string;
   sender: IUser;
   recipient: IUser;

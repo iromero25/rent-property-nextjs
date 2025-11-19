@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { IMessageDocument } from "@/types";
+import { IMessage } from "@/types";
 import { markMessageAsRead, deleteMessage } from "@/app/actions";
 
 interface MessageCardProps {
-  message: IMessageDocument;
+  message: IMessage;
 }
 
 export const MessageCard = ({ message }: MessageCardProps) => {
