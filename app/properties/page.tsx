@@ -2,13 +2,30 @@ import { IProperty } from "@/types";
 import Property from "@/models/Property";
 import connectDB from "@/config/database";
 import PropertyCard from "@/components/PropertyCard";
+import { Pagination } from "@/components/Pagination";
 
-export default async function PropertiesPage() {
+interface PropertiesPageProps {
+  searchParams: Promise<{
+    pageSize?: string;
+    page?: string;
+  }>;
+}
+
+export default async function PropertiesPage({
+  searchParams,
+}: PropertiesPageProps) {
   await connectDB();
+  const { pageSize = "2", page = "1" } = await searchParams;
+  const parsedPageSize = parseInt(pageSize);
+  const parsedPage = parseInt(page);
 
-  const properties = await Property.find({}).lean<IProperty[]>();
+  const skip = (parsedPage - 1) * parsedPageSize;
 
-  console.log("properties", properties);
+  const total = await Property.countDocuments({});
+  const properties = await Property.find<IProperty>({})
+    .skip(skip)
+    .limit(parsedPageSize);
+  const showPagination = total > parsedPageSize;
 
   return (
     <section className="px-4 py-6">
@@ -22,6 +39,13 @@ export default async function PropertiesPage() {
               <PropertyCard key={`property-${index}`} property={property} />
             ))}
           </div>
+        )}
+        {showPagination && (
+          <Pagination
+            page={parsedPage}
+            pageSize={parsedPageSize}
+            totalItems={total}
+          />
         )}
       </div>
     </section>
