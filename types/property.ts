@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { IUser } from "./user";
 
 export type PropertyLocation = {
   street: string;
@@ -27,9 +27,9 @@ export type SellerInfo = {
   phone: string;
 };
 
-export interface IProperty {
-  _id: string;
-  owner: Schema.Types.ObjectId;
+interface Property {
+  _id: unknown;
+  owner: IUser;
   name: string;
   type: PropertyType;
   description: string;
@@ -44,4 +44,12 @@ export interface IProperty {
   is_featured: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface IPropertyDoc extends Property {
+  _id: object;
+}
+
+export interface IProperty extends Property {
+  _id: string;
 }

@@ -1,9 +1,15 @@
 import Link from "next/link";
+import { IPropertyDoc } from "@/types";
 import Property from "@/models/Property";
 import connectDB from "@/config/database";
 import { FaArrowLeft } from "react-icons/fa";
+import ShareButtons from "@/components/ShareButtons";
+import BookmarkButton from "@/components/BookmarkButton";
 import PropertyDetails from "@/components/PropertyDetails";
+import { PropertyImages } from "@/components/PropertyImages";
+import PropertyContactForm from "@/components/PropertyContactForm";
 import PropertyHeaderImage from "@/components/PropertyHeaderImage";
+import { convertToSerializeableObject } from "@/utils/convertToObject";
 
 interface PropertyPageProps {
   params: Promise<{
@@ -14,15 +20,17 @@ interface PropertyPageProps {
 export default async function PropertyPage({ params }: PropertyPageProps) {
   await connectDB();
   const { id } = await params;
-  const property = await Property.findById(id).lean();
+  const propertyDoc = await Property.findById(id).lean<IPropertyDoc>();
 
-  if (!property) {
+  if (!propertyDoc) {
     return (
       <h1 className="text-center text-2xl font-bold mt-10">
         Property Not Found
       </h1>
     );
   }
+
+  const property = convertToSerializeableObject(propertyDoc);
 
   return (
     <>
@@ -42,15 +50,15 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
         <div className="container m-auto py-10 px-6">
           <div className="grid grid-cols-1 md:grid-cols-70/30 w-full gap-6">
             <PropertyDetails property={property} />
-            {/* <!-- Sidebar --> */}
-            {/* <aside className='space-y-4'>
+            <aside className="space-y-4">
               <BookmarkButton property={property} />
               <ShareButtons property={property} />
               <PropertyContactForm property={property} />
-            </aside> */}
+            </aside>
           </div>
         </div>
       </section>
+      <PropertyImages images={property.images} />
     </>
   );
 }
