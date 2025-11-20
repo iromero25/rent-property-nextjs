@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Property } from "@/types";
+import { IProperty } from "@/types";
 import {
   FaBed,
   FaBath,
@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 
 interface PropertyCardProps {
-  property: Property;
+  property: IProperty;
 }
 
 export default function PropertyCard({ property }: PropertyCardProps) {
@@ -27,8 +27,9 @@ export default function PropertyCard({ property }: PropertyCardProps) {
 
   return (
     <div className="rounded-xl shadow-md relative">
+      {/* ToDo: wrap the image in a Link component so clicking on it takes me to the details page */}
       <Image
-        src={`/images/properties/${property.images[0]}`}
+        src={property.images[0]}
         alt=""
         width="0"
         height="0"
