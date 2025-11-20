@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "react-toastify";
 import { IMessage } from "@/types";
+import { toast } from "react-toastify";
 import { markMessageAsRead, deleteMessage } from "@/app/actions";
+import { useUnreadMessagesContext } from "@/context/unreadMessagesContext";
 
 interface MessageCardProps {
   message: IMessage;
@@ -13,15 +14,19 @@ export const MessageCard = ({ message }: MessageCardProps) => {
   const [isRead, setIsRead] = useState(message.read);
   const [isDeleted, setIsDeleted] = useState(false);
 
+  const { setUnreadCount } = useUnreadMessagesContext();
+
   const handleReadClick = async () => {
     const read = await markMessageAsRead(message._id);
     setIsRead(read);
+    setUnreadCount((prev) => (read ? prev - 1 : prev + 1));
     toast.success(`Marked as ${read ? "read" : "new"}`);
   };
 
   const handleDeleteClick = async () => {
     await deleteMessage(message._id);
     setIsDeleted(true);
+    setUnreadCount((prev) => (isRead ? prev : prev - 1));
     toast.success("Message Deleted");
   };
 
